@@ -10,7 +10,6 @@ package com.liu.common.exception;
 
 
 import com.liu.common.utils.R;
-
 import org.apache.shiro.authz.AuthorizationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
