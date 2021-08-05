@@ -22,6 +22,7 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
       enabled: true
+
   redis:
     open: false  # 是否开启redis缓存  true开启   false关闭
     database: 0
@@ -37,6 +38,12 @@ spring:
         min-idle: 5       # 连接池中的最小空闲连接
   mvc:
     throw-exception-if-no-handler-found: true
+  application:
+    name: renren-fast
+  cloud:
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848
 #  resources:
 #    add-mappings: false
 
