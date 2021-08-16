@@ -2,12 +2,28 @@ spring:
   cloud:
     gateway:
       routes:
+        #商品路由
         - id: product_route
           uri: lb://mall-product
           predicates:
             - Path=/api/mallproduct/**
           filters:
             - RewritePath=/api/(?<segment>.*),/$\{segment}
+        #第三方路由
+        - id: third-party-route
+          uri: lb://mall-third-party
+          predicates:
+            - Path=/api/thirdparty/**
+          filters:
+            - RewritePath=/api/thirdparty/(?<segment>.*),/$\{segment}
+
+        #会员服务路由
+        - id: third-party-route
+            uri: lb://mall-member
+            predicates:
+              - Path=/api/thirdparty/**
+            filters:
+              - RewritePath=/api/thirdparty/(?<segment>.*),/$\{segment}
 
         - id: admin_route
           uri: lb://renren-fast
@@ -15,4 +31,5 @@ spring:
             - Path=/api/**
           filters:
             - RewritePath=/api/(?<segment>.*),/renren-fast/$\{segment}
+
 # 前端项目发送请求 都带上api

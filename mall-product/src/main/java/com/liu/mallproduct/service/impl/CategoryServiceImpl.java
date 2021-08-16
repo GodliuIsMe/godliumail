@@ -7,9 +7,12 @@ import com.liu.common.utils.PageUtils;
 import com.liu.common.utils.Query;
 import com.liu.mallproduct.dao.CategoryDao;
 import com.liu.mallproduct.entity.CategoryEntity;
+import com.liu.mallproduct.service.CategoryBrandRelationService;
 import com.liu.mallproduct.service.CategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -17,6 +20,9 @@ import java.util.stream.Collectors;
 
 @Service("categoryService")
 public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity> implements CategoryService {
+
+    @Autowired
+    CategoryBrandRelationService relationService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -56,6 +62,28 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
         //逻辑删除 通过 修改数据库中 的某一标志位 来表示是否删除
 
         baseMapper.deleteBatchIds(asList);
+    }
+
+    @Override
+    public Long[] findCateLogPath(Long catelogId) {
+        List<Long> paths = new ArrayList<>();
+        List<Long> paths2 = findParentPath(catelogId,paths);
+        return (Long[]) paths2.toArray(new Long[paths2.size()]);
+    }
+
+    @Override
+    public void updateCascade(CategoryEntity category) {
+        this.updateById(category);
+        relationService.updateCategory(category.getCatId(),category.getName());
+    }
+
+    private List<Long> findParentPath(Long catelogId,List<Long> paths){
+        paths.add(0,catelogId);
+        CategoryEntity byId = this.getById(catelogId);
+        if(byId.getParentCid()!=0){
+            findParentPath(byId.getParentCid(),paths);
+        }
+        return paths;
     }
 
     private List<CategoryEntity> getChildrens(CategoryEntity root,List<CategoryEntity> all){
