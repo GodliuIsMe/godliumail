@@ -34,5 +34,6 @@ public interface AttrService extends IService<AttrEntity> {
     void deleteRelation(AttrGroupRelationVo[] relationVos);
 
     PageUtils getNoRelationAttr(Long attrgroupId, Map<String, Object> params);
+
 }
 

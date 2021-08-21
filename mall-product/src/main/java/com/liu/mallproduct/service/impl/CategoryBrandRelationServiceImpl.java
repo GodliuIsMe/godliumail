@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Service("categoryBrandRelationService")
@@ -27,6 +28,7 @@ public class CategoryBrandRelationServiceImpl extends ServiceImpl<CategoryBrandR
 
     @Autowired
     CategoryDao categoryDao;
+
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -73,6 +75,20 @@ public class CategoryBrandRelationServiceImpl extends ServiceImpl<CategoryBrandR
     @Override
     public void updateCategory(Long catId, String name) {
         this.baseMapper.updateCategory(catId,name);
+    }
+
+    @Override
+    public List<BrandEntity> getBrandsByCatId(Long catId) {
+        List<CategoryBrandRelationEntity> relationEntities = this.baseMapper.selectList(new QueryWrapper<CategoryBrandRelationEntity>().eq("catelog_id", catId));
+        List<Long> brandIds = relationEntities.stream().map((item) -> {
+            return item.getBrandId();
+        }).collect(Collectors.toList());
+        if(brandIds==null||brandIds.isEmpty()){
+            return null;
+        }
+        List<BrandEntity> brands = brandDao.selectBatchIds(brandIds);
+
+        return brands;
     }
 
 }

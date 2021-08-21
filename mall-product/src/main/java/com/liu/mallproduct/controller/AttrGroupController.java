@@ -2,7 +2,6 @@ package com.liu.mallproduct.controller;
 
 import com.liu.common.utils.PageUtils;
 import com.liu.common.utils.R;
-import com.liu.mallproduct.dao.AttrAttrgroupRelationDao;
 import com.liu.mallproduct.entity.AttrEntity;
 import com.liu.mallproduct.entity.AttrGroupEntity;
 import com.liu.mallproduct.service.AttrAttrgroupRelationService;
@@ -10,6 +9,7 @@ import com.liu.mallproduct.service.AttrGroupService;
 import com.liu.mallproduct.service.AttrService;
 import com.liu.mallproduct.service.CategoryService;
 import com.liu.mallproduct.vo.AttrGroupRelationVo;
+import com.liu.mallproduct.vo.AttrGroupWithAttrVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +40,16 @@ public class AttrGroupController {
 
     @Autowired
     private AttrAttrgroupRelationService relationService;
+
+    /*
+     * 获取当前分类下所有分组 和  关联属性
+     * /product/attrgroup/{catelogId}/withattr
+     */
+    @GetMapping("{catelogId}/withattr")
+    public R getAllAttr(@PathVariable("catelogId") Long catelogId){
+        List<AttrGroupWithAttrVo> attrVo = attrGroupService.getAttrGroupWithAttrsByCatelogId(catelogId);
+        return R.ok().put("data",attrVo);
+    }
 
     /*
     属性于分组的关系 添加

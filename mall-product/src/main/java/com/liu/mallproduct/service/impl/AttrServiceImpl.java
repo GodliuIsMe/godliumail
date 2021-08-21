@@ -11,10 +11,7 @@ import com.liu.mallproduct.dao.AttrAttrgroupRelationDao;
 import com.liu.mallproduct.dao.AttrDao;
 import com.liu.mallproduct.dao.AttrGroupDao;
 import com.liu.mallproduct.dao.CategoryDao;
-import com.liu.mallproduct.entity.AttrAttrgroupRelationEntity;
-import com.liu.mallproduct.entity.AttrEntity;
-import com.liu.mallproduct.entity.AttrGroupEntity;
-import com.liu.mallproduct.entity.CategoryEntity;
+import com.liu.mallproduct.entity.*;
 import com.liu.mallproduct.service.AttrService;
 import com.liu.mallproduct.service.CategoryService;
 import com.liu.mallproduct.vo.AttrGroupRelationVo;
@@ -81,7 +78,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         //包括i本属性，和 销售属性
         QueryWrapper<AttrEntity> wrapper = new QueryWrapper<AttrEntity>()
                 .eq("attr_type","base".equalsIgnoreCase(type)
-                        ?ProductConstant.AttrEnum.ATTR_TYPE_SALE.getCode():ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode());
+                        ?ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode():ProductConstant.AttrEnum.ATTR_TYPE_SALE.getCode());
         if(catelogId!=0){
             wrapper.eq("catelog_id",catelogId);
         }
@@ -179,7 +176,9 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
             }
         }
     }
-
+    /*
+     * 根据 分组id  获取属性id
+     */
     @Override
     public List<AttrEntity> getRelationAttr(Long attrgroupId) {
 
